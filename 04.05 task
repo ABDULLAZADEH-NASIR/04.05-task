@@ -1,0 +1,256 @@
+import java.util.Scanner;
+
+public class SatisPlatformasi {
+    public static Saticilar[] Saticilar = new Saticilar[10];
+    public static Mallar[] mallar = new Mallar[10];
+    public static int mayaDeyeri = 0;
+    public static int satishMeblegi = 0;
+    public static Saticilar qeydiyatdadirmi = null;
+    public static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        menu();
+    }
+
+    public static void menu() {
+        Saticilar satici = new Saticilar("Nasir", "nasir1", "123", true);
+        for (Saticilar s : Saticilar) {
+            Saticilar[0] = satici;
+        }
+        startApp();
+    }
+
+    public static void startApp() {
+
+        while (true) {
+            System.out.print("Adinizi daxil edin: ");
+            String ad = scanner.next();
+            System.out.print("User adinizi daxil edin: ");
+            String userAdi = scanner.next();
+            System.out.print("Passwordu daxil edin: ");
+            String password = scanner.next();
+            System.out.print("Adminsizizmi? 1 (beli) / 0 (xeyir) :");
+            int adminsinizmi = scanner.nextInt();
+
+            for (Saticilar satici : Saticilar) {
+                if (satici != null && satici.AdSoyad.equals(ad) && satici.password.equals(password)) {
+                    qeydiyatdadirmi = satici;
+                }
+            }
+
+            if (qeydiyatdadirmi == null) {
+                System.out.println("Qeydiyyatda deyilsiniz ");
+                startApp();
+            }
+
+            switch (adminsinizmi) {
+                case 1:
+                    adminFelaiyyeti();
+                    break;
+                case 0:
+                    userFealiyyeti();
+                    break;
+                default:
+                    System.out.println("Admin olub olmadiginiz haqqda melumat tapilmadi: ");
+                    startApp();
+            }
+        }
+    }
+
+    public static void adminFelaiyyeti() {
+        System.out.println("1. Satici elave edin:");
+        System.out.println("2. Satici siyahidan silin:");
+        System.out.println("3. Mal daxil edin:");
+        System.out.println("4. Satis edin:");
+        System.out.println("5. Cixish edin:");
+        int secim = scanner.nextInt();
+        switch (secim) {
+            case 1:
+                saticiElaveEtmek();
+                adminFelaiyyeti();
+                break;
+            case 2:
+                saticiSilmek();
+                break;
+            case 3:
+                malDaxilEtmek();
+                break;
+            case 4:
+                satisEtmek();
+                break;
+            case 5:
+                startApp();
+                break;
+            default:
+                System.out.println("Duzgun secim edin: ");
+        }
+
+    }
+
+    public static void userFealiyyeti() {
+        System.out.println("1.Satis edin: ");
+        System.out.println("2.Cixis edin: ");
+
+        int cavab = scanner.nextInt();
+        switch (cavab) {
+            case 1:
+                satisEtmek();
+                break;
+            case 2:
+                startApp();
+                break;
+            default:
+                System.out.println("Duzgun regemi daxil edin");
+                userFealiyyeti();
+        }
+
+    }
+
+    public static void saticiElaveEtmek() {
+        System.out.println("Yeni Saticnin adini daxil edin:");
+        String yeniAd = scanner.next();
+        System.out.println("Yeni Saticinin userAdini daxil edin:");
+        String yeniUserAd = scanner.next();
+        System.out.println("Yeni Saticinin passwordunu daxil edin:");
+        String yeniPassword = scanner.next();
+        System.out.println("Yeni Saticiniz admindirmi? 1 (beli) / 0 (xeyir) ");
+        int secim = scanner.nextInt();
+
+        boolean cavab = secim == 1 ? true : false;
+
+        Saticilar yeniSatici = new Saticilar(yeniAd, yeniUserAd, yeniPassword, cavab);
+        boolean doludurmu = true;
+
+
+        for (int i = 0; i < Saticilar.length; i++) {
+            if (Saticilar[i] == null) {
+
+                Saticilar[i] = yeniSatici;
+                doludurmu = false;
+                break;
+            }
+        }
+        if (doludurmu) {
+            Saticilar[] yeniSaticilar = new Saticilar[Saticilar.length * 2];
+            for (int i = 0; i < Saticilar.length; i++) {
+                Saticilar[i] = yeniSaticilar[i];
+
+                yeniSatici = yeniSaticilar[Saticilar.length];
+            }
+            yeniSaticilar = Saticilar;
+        }
+    }
+
+    public static void saticiSilmek() {
+        System.out.println("Sileceyiniz Saticinin adini daxil edin: ");
+        String silinecekSatici = scanner.next();
+
+
+        boolean silinecek = false;
+        for (Saticilar s : Saticilar) {
+            if (s != null && s.AdSoyad.equals(silinecekSatici)) {
+                silinecek = true;
+            }
+        }
+        if (silinecek) {
+            Saticilar[] yeniSiyahi = new Saticilar[Saticilar.length - 1];
+            for (Saticilar s : Saticilar) {
+                if (s != null && s.AdSoyad.equals(silinecekSatici)) {
+                    s = null;
+                    System.out.println("Satici silindi");
+                    break;
+                }
+            }
+            Saticilar = yeniSiyahi;
+        } else {
+            System.out.println("Satici adi tapilmadi ");
+        }
+
+    }
+
+    public static void malDaxilEtmek() {
+
+        System.out.println("daxil etmek istediyiniz malin adini daxil edin:");
+        String maladi = scanner.next();
+        System.out.println("daxil etmek istediyiniz malin sayini daxil edin:");
+        int malsayi = scanner.nextInt();
+        System.out.println("daxil etmek istediyiniz malin kodunu daxil edin:");
+        String malKodu = scanner.next();
+        System.out.println("daxil etmek istediyiniz malin satis qiymetini daxil edin:");
+        double qiymeti = scanner.nextDouble();
+        System.out.println("daxil etmek istediyiniz malin maya deyerini daxil edin:");
+        double mayaDeyeri = scanner.nextDouble();
+
+        boolean eynimalvarmi = false;
+
+        Mallar mal = new Mallar(maladi, malKodu, qiymeti, mayaDeyeri, malsayi);
+        for (Mallar m : mallar) {
+            if (m != null && m.cod.equals(malKodu)) {
+                m.say += malsayi;
+                eynimalvarmi = true;
+                System.out.println("Mal daxil edildi");
+                break;
+
+            }
+        }
+
+
+            boolean doludurmu = true;
+            for (int i = 0; i < mallar.length; i++) {
+                if (mallar[i] == null) {
+                    mallar[i] = mal;
+                    doludurmu = false;
+                    System.out.println("Mal daxil edildi");
+                    break;
+                }
+            }
+            if (doludurmu) {
+                Mallar[] yenimallar = new Mallar[mallar.length * 2];
+                for (int i = 0; i < mallar.length; i++) {
+                    mallar[i] = yenimallar[i];
+                }
+                mal = yenimallar[mallar.length];
+                mallar = yenimallar;
+                System.out.println("Mal daxil edildi");
+            }
+
+    }
+
+    public static void satisEtmek() {
+        System.out.println("Satmaq istediyiniz malin kodunu daxil edin:");
+        String satisKodu = scanner.next();
+
+
+        Mallar mal = null;
+        for(Mallar m:mallar){
+            if(m !=null && m.cod.equals(satisKodu)){
+                mal=m;
+            }
+        }
+        if(mal==null){
+            System.out.println("Istediyiniz mal tapilmadi");
+            satisEtmek();
+        }
+        System.out.println("istediyiniz mallarin qiymeti : "+mal.qiymet+" sayi ise: "+ mal.say);
+        System.out.println("Satacaginiz main sayini daxil edin:");
+        int say=scanner.nextInt();
+        if(say<=mal.say){
+            System.out.println("yekun mebleg: "+say*mal.qiymet);
+            System.out.println("Satis etmek isteyirsinizmi? beli/xeyir");
+            String cavab=scanner.next();
+            if (cavab.equalsIgnoreCase("beli")) {
+                say= mal.say;
+                satishMeblegi+=say* mal.qiymet;
+                mayaDeyeri+=say*mal.mayasi;
+                mal.say-=say;
+                System.out.println("satis edildi");
+
+            }else{
+                satisEtmek();
+            }
+        }else {
+            System.out.println("Istediyiniz sayda mal yoxdu");
+            satisEtmek();
+        }
+    }
+}
